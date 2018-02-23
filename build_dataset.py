@@ -24,7 +24,7 @@ from tqdm import tqdm
 SIZE = 128 #Using 128x128 pixels for now. 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--data_dir', default='data/raw_specs', help="Directory with the raw spectrograms")
+parser.add_argument('--data_dir', default='data/sliced_specs', help="Directory with the raw spectrograms")
 parser.add_argument('--train_fraction', default= 0.9, help="Percentage of dataset to be used for training")
 parser.add_argument('--output_dir', default='data/128x128_specs', help="Where to write the new data")
 

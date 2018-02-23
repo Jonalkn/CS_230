@@ -43,15 +43,4 @@ if __name__ == '__main__':
 
 	rename_and_save(args.data_dir, args.output_dir, song_dict, genre_dict)
 
-	# fnames = os.listdir(args.data_dir);
-
-
-	# for filename in fnames:
-	# 	if filename.endswith(".mp3"):
-	# 		temp = filename
-	# 		lhs, _ = filename.split(".")
-	# 		song_type = song_dict[int(lhs)]
-	# 		type_code = genre_dict[str(song_type)]
-	# 		os.rename(os.path.join(args.data_dir, filename), os.path.join(args.output_dir, str(type_code)+"_"+temp))
-
 

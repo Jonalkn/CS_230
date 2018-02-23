@@ -5,6 +5,7 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--audio_dir', default='data/wav_songs', help="Directory with the .wav SONGS dataset")
 parser.add_argument('--output_dir', default='data/raw_specs', help="Where to write the new data")
+pixpersec = 50
 
 if __name__ == '__main__':
 	args = parser.parse_args()
@@ -24,7 +25,7 @@ if __name__ == '__main__':
 		if fname.endswith(".wav"):
 			source = os.path.join(audio_dir, fname)
 			dest = os.path.join(specs_dir, str(fname.split(".")[0])+".png")
-			command = ['sox', source, '-n', 'remix', '2','spectrogram', '-m','-r', '-l', '-o', dest]
+			command = ['sox', source, '-n', 'remix', '1','spectrogram', '-Y', '200', '-X', str(pixpersec), '-m', '-r', '-o', dest]
 			subprocess.call(command)
 
 
