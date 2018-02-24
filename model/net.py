@@ -1,4 +1,9 @@
-"""Defines the neural network, losss function and metrics"""
+"""
+Defines the neural network, losss function and metrics
+
+Architecture modified from the provided starter code
+
+"""
 
 import numpy as np
 import torch
@@ -33,6 +38,7 @@ class Net(nn.Module):
         """
         super(Net, self).__init__()
         self.num_channels = params.num_channels
+        self.num_classes  = params.num_classes
         
         # each of the convolution layers below have the arguments (input_channels, output_channels, filter_size,
         # stride, padding). We also include batch normalisation layers that help stabilise training.
@@ -45,9 +51,9 @@ class Net(nn.Module):
         self.bn3 = nn.BatchNorm2d(self.num_channels*4)
 
         # 2 fully connected layers to transform the output of the convolution layers to the final output
-        self.fc1 = nn.Linear(8*8*self.num_channels*4, self.num_channels*4)
+        self.fc1 = nn.Linear(16*16*self.num_channels*4, self.num_channels*4)
         self.fcbn1 = nn.BatchNorm1d(self.num_channels*4)
-        self.fc2 = nn.Linear(self.num_channels*4, 8)       
+        self.fc2 = nn.Linear(self.num_channels*4, self.num_classes)       
         self.dropout_rate = params.dropout_rate
 
     def forward(self, s):
@@ -62,17 +68,17 @@ class Net(nn.Module):
 
         Note: the dimensions after each step are provided
         """
-        #                                                  -> batch_size x 3 x 64 x 64
+        #                                                  -> batch_size x 1 x 128 x 128
         # we apply the convolution layers, followed by batch normalisation, maxpool and relu x 3
-        s = self.bn1(self.conv1(s))                         # batch_size x num_channels x 64 x 64
-        s = F.relu(F.max_pool2d(s, 2))                      # batch_size x num_channels x 32 x 32
-        s = self.bn2(self.conv2(s))                         # batch_size x num_channels*2 x 32 x 32
-        s = F.relu(F.max_pool2d(s, 2))                      # batch_size x num_channels*2 x 16 x 16
-        s = self.bn3(self.conv3(s))                         # batch_size x num_channels*4 x 16 x 16
-        s = F.relu(F.max_pool2d(s, 2))                      # batch_size x num_channels*4 x 8 x 8
+        s = self.bn1(self.conv1(s))                         # batch_size x num_channels x 128 x 128
+        s = F.relu(F.max_pool2d(s, 2))                      # batch_size x num_channels x 64 x 64
+        s = self.bn2(self.conv2(s))                         # batch_size x num_channels*2 x 64 x 64
+        s = F.relu(F.max_pool2d(s, 2))                      # batch_size x num_channels*2 x 32 x 32
+        s = self.bn3(self.conv3(s))                         # batch_size x num_channels*4 x 32 x 32
+        s = F.relu(F.max_pool2d(s, 2))                      # batch_size x num_channels*4 x 16 x 16
 
         # flatten the output for each image
-        s = s.view(-1, 8*8*self.num_channels*4)             # batch_size x 8*8*num_channels*4
+        s = s.view(-1, 16*16*self.num_channels*4)             # batch_size x 16*16*num_channels*4
 
         # apply 2 fully connected layers with dropout
         s = F.dropout(F.relu(self.fcbn1(self.fc1(s))), 
