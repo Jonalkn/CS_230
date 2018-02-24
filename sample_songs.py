@@ -2,6 +2,7 @@ import os
 import argparse
 import random
 from shutil import copyfile
+from tqdm import tqdm
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--data_dir', default='data/fma_small', help="Directory with all songs")
@@ -33,7 +34,7 @@ if __name__ == '__main__':
 	else:
 		print("Warning: output dir {} already exists".format(raw_songs))
 
-	for f in sel_fnames:
+	for f in tqdm(sel_fnames):
 		dst = os.path.join(raw_songs, f.split("/")[-1])
 
 		copyfile(f, dst)

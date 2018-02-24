@@ -1,3 +1,18 @@
+"""
+Classify_save takes songs from the fma_small database and uses the tracks.csv
+file from the fma_metadata to classify the songs. It adds a number representing the song
+genre before the number of the track.
+The following encoding is used:
+
+	0 - Electronic
+	1 - Experimental
+	2 - Folk
+	3 - Hip-Hop
+	4 - Instrumental
+	5 - International
+	6 - Pop
+	7 - Rock
+"""
 
 import os
 import subprocess
@@ -5,6 +20,7 @@ import IPython.display as ipd
 import numpy as np
 import pandas as pd
 import argparse
+from tqdm import tqdm
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--data_dir', default='data/raw_songs', help="Directory with the raw SONGS dataset")
@@ -15,7 +31,7 @@ parser.add_argument('--output_dir', default='data/classified_songs', help="Where
 def rename_and_save(data_dir, output_dir, song_dict, genre_dict):
 	fnames = os.listdir(args.data_dir);
 
-	for filename in fnames:
+	for filename in tqdm(fnames):
 		if filename.endswith(".mp3"):
 			temp = filename
 			lhs, _ = filename.split(".")
@@ -28,7 +44,7 @@ if __name__ == '__main__':
 
 	assert os.path.isdir(args.data_dir), "Couldn't find the dataset at {}".format(args.data_dir)
 
-	df = pd.read_csv(args.meta_data, skiprows  = 1);
+	df = pd.read_csv(args.meta_data, skiprows  = 1); 
 	df2 = pd.read_csv(args.meta_data, skiprows  = 2);
 
 	df = df.loc[1:, "genre_top" ];

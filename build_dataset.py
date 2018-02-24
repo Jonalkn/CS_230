@@ -8,9 +8,6 @@ then 0.8 of the data will be used for training (train/dev (0.9/0.1)) and the res
 
 Future modifications
  -- allow for test to come from a different distribution ie. just split data into train and dev
- -- Milestone 1: Just taking entire spectrogram and converting it to a 128x128 image and training on thi
-    -- Plan split up spectrogram of a song into smaller portions
-    -- Currently using monochrome spectrograms, maybe try RGB and compare the perfomance
 
 """
 

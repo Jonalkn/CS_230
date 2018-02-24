@@ -1,6 +1,7 @@
 import os
 from PIL import Image
 import argparse
+from tqdm import tqdm
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--raw_specs', default='data/raw_specs', help="Directory with the raw spectrograms")
@@ -35,7 +36,7 @@ if __name__ == '__main__':
 	else:
 		print("Warning: output dir {} already exists".format(sliced_specs))
 
-	for fname in os.listdir(raw_specs):
+	for fname in tqdm(os.listdir(raw_specs)):
 		if fname.endswith(".png"):
 			slice_spec(fname, size, raw_specs, sliced_specs)
 

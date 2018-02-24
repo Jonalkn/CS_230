@@ -3,6 +3,7 @@ import subprocess
 import IPython.display as ipd
 import numpy as np
 import argparse
+from tqdm import tqdm
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--mp3_dir', default='data/classified_songs', help="Directory with the raw SONGS dataset")
@@ -21,7 +22,7 @@ if __name__ == '__main__':
 	else:
 		print("Warning: output dir {} already exists".format(wav_dir))
 
-	for fname in os.listdir(args.mp3_dir):
+	for fname in tqdm(os.listdir(args.mp3_dir)):
 		if fname.endswith(".mp3"):
 			command = ['ffmpeg', '-v', '0', '-i', os.path.join(mp3_dir, fname), os.path.join(wav_dir, str(fname.split(".")[0])+ ".wav")]
 			subprocess.call(command)

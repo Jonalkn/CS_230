@@ -1,6 +1,7 @@
 import os
 import subprocess
 import argparse
+from tqdm import tqdm  #For progress bars etc
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--audio_dir', default='data/wav_songs', help="Directory with the .wav SONGS dataset")
@@ -10,8 +11,8 @@ pixpersec = 50
 if __name__ == '__main__':
 	args = parser.parse_args()
 
-	audio_dir = args.audio_dir
-	specs_dir = args.output_dir
+	audio_dir = args.audio_dir   # source of the .wav songs
+	specs_dir = args.output_dir  # Output directory for the raw spectrograms
 
 	assert os.path.isdir(audio_dir), "Couldn't find the dataset at {}".format(audio_dir)
 
@@ -21,12 +22,23 @@ if __name__ == '__main__':
 		print("Warning: output dir {} already exists".format(specs_dir))
 
 
-	for fname in os.listdir(audio_dir):
-		if fname.endswith(".wav"):
-			source = os.path.join(audio_dir, fname)
-			dest = os.path.join(specs_dir, str(fname.split(".")[0])+".png")
-			command = ['sox', source, '-n', 'remix', '1','spectrogram', '-Y', '200', '-X', str(pixpersec), '-m', '-r', '-o', dest]
-			subprocess.call(command)
+	fnames = os.listdir(audio_dir)
+	fnames = [os.path.join(audio_dir, f) for f in fnames if f.endswith(".wav")]
+
+	for fname in tqdm(fnames):
+		dest = os.path.join(specs_dir, str(fname.split("/")[-1].split(".")[0])+".png")
+		"""
+		Create a command for the os to run sox and create a spectrogram
+		remix 1 selects the left channel of the music
+		-Y 200 sets the y axis to be 200 pixels
+		-X pixpersec sets the number of pixels per second in the spectrogram
+		-m for grayscale
+		-r Get a raw spectrogram without axes
+		-o output file
+		"""
+
+		command = ['sox', fname, '-n', 'remix', '1','spectrogram', '-Y', '200', '-X', str(pixpersec), '-m', '-r', '-o', dest]
+		subprocess.call(command)
 
 
 
